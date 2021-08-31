@@ -10,9 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^2.30.2"
+    "@prisma/client": "^2.31.0-integration-node-api-memleak-investigation.1"
   },
   "devDependencies": {
-    "prisma": "^2.30.2"
+    "prisma": "^2.31.0-integration-node-api-memleak-investigation.1"
   }
 }
