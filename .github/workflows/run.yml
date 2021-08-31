@@ -1,0 +1,42 @@
+name: run
+on: push
+
+jobs:
+  foo:
+    runs-on: ubuntu-latest
+    # services:
+    #   postgres:
+    #     image: postgres
+    #     env:
+    #       POSTGRES_USER: postgres
+    #       POSTGRES_PASSWORD: example
+    #     # Set health checks to wait until postgres has started
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
+    #     ports:
+    #       - 5432:5432
+    # env:
+    #   DATABASE_URL: "postgresql://postgres:example@localhost"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        queryEngine: ['library', 'binary']
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set CLI Engine Type
+        run: |
+          echo "PRISMA_CLI_QUERY_ENGINE_TYPE=${{ matrix.queryEngine }}" >> $GITHUB_ENV
+      - name: Set Client Engine Type
+        run: |
+          echo "PRISMA_CLIENT_ENGINE_TYPE=${{ matrix.queryEngine }}" >> $GITHUB_ENV
+
+      - run: npm install
+      - run: npx prisma db push
+      - run: npx prisma -v
+      - run: node script.js
